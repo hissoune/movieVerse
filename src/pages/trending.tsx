@@ -5,13 +5,14 @@ import Navbar from "../components/naveBar";
 import useDebounce from "../hooks/useDebounce";
 import MovieFilters from "../components/MovieFilters";
 import MovieGridSkeleton from "../components/loadingSkeleton";
+import Pagination from "../components/pagination";
 
 function Trending() {
 const [searchQuery, setSearchQuery] = useState("");
 const [yearFilter, setYearFilter] = useState("");
 const [sortByFilter, setSortByFilter] = useState("");
 const debouncedSearchQuery = useDebounce(searchQuery, 500);
-const { movies, loading, error } = useMovies(debouncedSearchQuery);
+const { movies, loading, error, page,totalPages,changePage, } = useMovies(debouncedSearchQuery);
 
 
 const filteredMovies = movies
@@ -68,7 +69,8 @@ const filteredMovies = movies
             <MovieGridSkeleton  />
           
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 p-20">
+        <>
+         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 p-10">
           {filteredMovies.length > 0 ? (
             filteredMovies.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
@@ -79,6 +81,12 @@ const filteredMovies = movies
             </div>
           )}
         </div>
+
+        {!loading && !error && movies.length > 0 && (
+            <Pagination page={page} totalPages={totalPages} changePage={changePage} />
+          )}
+        </>
+       
       )}
     </div>
     

@@ -7,13 +7,19 @@ import {
 
 const useFavorites = (movie?: Movie) => {
   const [favorites, setFavorites] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const isFavorite = movie
     ? favorites.some((fav) => fav.id === movie.id)
     : false;
 
   useEffect(() => {
-    setFavorites(getFavorites());
+    const timeout = setTimeout(() => {
+      setFavorites(getFavorites());
+      setLoading(false);
+    }, 700);
+
+    return () => clearTimeout(timeout);
   }, []);
 
   const toggleFavorite = (movie: Movie) => {
@@ -21,7 +27,7 @@ const useFavorites = (movie?: Movie) => {
     setFavorites(getFavorites());
   };
 
-  return { favorites, isFavorite, toggleFavorite };
+  return { favorites, isFavorite, loading, toggleFavorite };
 };
 
 export default useFavorites;
