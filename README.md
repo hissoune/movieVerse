@@ -106,14 +106,3 @@ MovieVerse uses the [TMDB API](https://developer.themoviedb.org/docs) to retriev
 
 You will need a TMDB API key to access the API. Keep your credentials in environment variables and never commit your `.env` file.
 
-## Future Improvements
-
-* Dark mode and light mode
-* Movie genre filters
-* Improved error handling
-* Pagination controls and page navigation improvements
-* Additional movie discovery features
-
-## License
-
-This project is intended for learning and portfolio purposes. Movie data and images are provided by TMDB and are subject to its terms and attribution requirements.
