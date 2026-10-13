@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MovieCard from "../components/MovieCard";
 import useMovies from "../hooks/useMovies";
 import Navbar from "../components/naveBar";
@@ -6,6 +6,7 @@ import useDebounce from "../hooks/useDebounce";
 import MovieFilters from "../components/MovieFilters";
 import MovieGridSkeleton from "../components/loadingSkeleton";
 import Pagination from "../components/pagination";
+import toast from "react-hot-toast";
 
 function Trending() {
 const [searchQuery, setSearchQuery] = useState("");
@@ -14,6 +15,11 @@ const [sortByFilter, setSortByFilter] = useState("");
 const debouncedSearchQuery = useDebounce(searchQuery, 500);
 const { movies, loading, error, page,totalPages,changePage, } = useMovies(debouncedSearchQuery);
 
+useEffect(() => {
+  if (error) {
+    toast.error(error);
+  }
+}, [error]);
 
 const filteredMovies = movies
   .filter((movie) => {
@@ -41,9 +47,7 @@ const filteredMovies = movies
 
 
 
-  if (error) {
-    return <div>{error}</div>;
-  }
+ 
   return (
     <div>
       <Navbar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
