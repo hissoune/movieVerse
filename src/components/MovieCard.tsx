@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import type { Movie } from "../types";
 import useFavorites from "../hooks/useFavorite";
 import { Heart } from "lucide-react";
+import toast from "react-hot-toast";
 
 interface MovieCardProps {
   movie: Movie;
@@ -13,6 +14,18 @@ function MovieCard({ movie }: MovieCardProps) {
 
   const handleDetails = () => {
     navigate(`/movieDetails/${movie.id}`);
+  };
+
+  const handleToggleFavorite = () => {
+    const wasFavorite = isFavorite;
+
+    toggleFavorite(movie);
+
+    toast.success(
+      wasFavorite
+        ? "Removed from favorites"
+        : "Added to favorites"
+    );
   };
 
   return (
@@ -51,7 +64,7 @@ function MovieCard({ movie }: MovieCardProps) {
       </button>
 
       <button
-        onClick={() => toggleFavorite(movie)}
+        onClick={handleToggleFavorite}
         aria-label={
           isFavorite ? "Remove from favorites" : "Add to favorites"
         }

@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import useMovieDetails from "../hooks/useMovieDetails";
 import useFavorites from "../hooks/useFavorite";
 import { Heart } from "lucide-react";
+import toast from "react-hot-toast";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
@@ -10,6 +11,20 @@ const MovieDetails = () => {
   const { movie, loading, error } = useMovieDetails(id);
   const { isFavorite, toggleFavorite } = useFavorites(movie);
   console.log("Movie details:", isFavorite);
+
+     const handleToggleFavorite = () => {
+            const wasFavorite = isFavorite;
+
+            toggleFavorite(movie);
+
+            toast.success(
+            wasFavorite
+                ? "Removed from favorites"
+                : "Added to favorites"
+            );
+  };
+
+
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-950 text-white">
@@ -83,7 +98,7 @@ const MovieDetails = () => {
             </h1>
 
             <button
-                onClick={() => toggleFavorite(movie)}
+                onClick={handleToggleFavorite}
                 aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
                 title={isFavorite ? "Remove from favorites" : "Add to favorites"}
                 className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full border transition-all duration-200 hover:scale-110 active:scale-95 ${
