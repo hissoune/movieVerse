@@ -1,3 +1,4 @@
+import { data } from "react-router-dom";
 import type { Movie } from "../types";
 import axiosInstance from "./apiClient";
 
@@ -18,4 +19,16 @@ const response = await axiosInstance.get<MoviesResponse>(
 console.log("Fetched trending movies:", response.data.results);
 
 return response.data.results;
+};
+
+export const searchMovies = async (query: string): Promise<Movie[]> => {
+const response = await axiosInstance.get<MoviesResponse>("/search/movie", {
+params: { query },
+});
+return response.data.results;
+};
+
+export const getMovieDetails = async (id: string): Promise<Movie> => {
+  const response = await axiosInstance.get(`/movie/${id}`);
+  return response.data;
 };

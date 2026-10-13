@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import type { Movie } from "../types";
 
 interface MovieCardProps {
@@ -5,8 +6,10 @@ interface MovieCardProps {
 }
 
 function MovieCard({ movie }: MovieCardProps) {
+    const navigation = useNavigate();
+
     const handleDetails = () => {
-        console.log("Movie details:", movie);
+        navigation(`/movieDetails/${movie.id}`);
     }
   return (
     <button onClick={handleDetails} className="  bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 ">
