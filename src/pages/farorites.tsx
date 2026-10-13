@@ -2,10 +2,9 @@ import { Heart } from "lucide-react";
 import useFavorites from "../hooks/useFavorite";
 import MovieCard from "../components/MovieCard";
 import NoFavorites from "../components/noFavorites";
-import MovieGridSkeleton from "../components/loadingSkeleton";
 
 function Favorites() {
-  const { favorites ,loading } = useFavorites();
+  const { favorites  } = useFavorites();
 
   if (favorites.length === 0) {
     return (
@@ -26,16 +25,13 @@ function Favorites() {
             {favorites.length} {favorites.length === 1 ? "movie" : "movies"} saved
           </p>
         </div>
-         {loading ? (
-            <MovieGridSkeleton  />
-          
-      ) : (
+        
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-4">
           {favorites.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
         </div>
-        )} 
+         
         
       </div>
     </main>

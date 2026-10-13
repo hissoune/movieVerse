@@ -5,29 +5,36 @@ import {
   toggleFavoriteToLocal,
 } from "../services/favoritesService";
 
+const FAVORITES_CHANGED = "favorites-changed";
+
 const useFavorites = (movie?: Movie) => {
-  const [favorites, setFavorites] = useState<Movie[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [favorites, setFavorites] = useState<Movie[]>(() => getFavorites());
+
+  useEffect(() => {
+    const syncFavorites = () => {
+      setFavorites(getFavorites());
+    };
+
+    window.addEventListener(FAVORITES_CHANGED, syncFavorites);
+
+    return () => {
+      window.removeEventListener(FAVORITES_CHANGED, syncFavorites);
+    };
+  }, []);
 
   const isFavorite = movie
     ? favorites.some((fav) => fav.id === movie.id)
     : false;
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setFavorites(getFavorites());
-      setLoading(false);
-    }, 700);
-
-    return () => clearTimeout(timeout);
-  }, []);
-
   const toggleFavorite = (movie: Movie) => {
     toggleFavoriteToLocal(movie);
+
     setFavorites(getFavorites());
+
+    window.dispatchEvent(new Event(FAVORITES_CHANGED));
   };
 
-  return { favorites, isFavorite, loading, toggleFavorite };
+  return { favorites, isFavorite, toggleFavorite };
 };
 
 export default useFavorites;
