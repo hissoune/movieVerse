@@ -1,12 +1,15 @@
 import { Link, useParams } from "react-router-dom";
 import useMovieDetails from "../hooks/useMovieDetails";
+import useFavorites from "../hooks/useFavorite";
+import { Heart } from "lucide-react";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
 const MovieDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { movie, loading, error } = useMovieDetails(id);
-
+  const { isFavorite, toggleFavorite } = useFavorites(movie);
+  console.log("Movie details:", isFavorite);
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-950 text-white">
@@ -50,7 +53,6 @@ const MovieDetails = () => {
         )}
 
         <div className="absolute inset-0 z-20 bg-black/50 opacity-70" />
-  {/* <div className="absolute inset-0 z-20 bg-gradient-to-t from-gray-950 via-gray-950/20 to-gray-950/50" /> */}
 
   <div className="relative z-30 mx-auto flex max-w-7xl flex-col gap-10 px-6 py-12 md:flex-row md:items-center md:gap-14 md:px-10 md:py-20">
           <div className="w-full max-w-[280px] shrink-0">
@@ -75,9 +77,28 @@ const MovieDetails = () => {
               <span aria-hidden="true">←</span> Back to movies
             </Link>
 
+           <div className="flex flex-wrap items-center gap-4">
             <h1 className="text-4xl font-extrabold tracking-tight md:text-6xl">
-              {movie.title}
+                {movie.title}
             </h1>
+
+            <button
+                onClick={() => toggleFavorite(movie)}
+                aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full border transition-all duration-200 hover:scale-110 active:scale-95 ${
+                isFavorite
+                    ? "border-red-500/40 bg-red-500/15 text-red-400"
+                    : "border-white/20 bg-white/10 text-white hover:border-red-400/50 hover:bg-red-500/15 hover:text-red-400"
+                }`}
+            >
+                <Heart
+                size={22}
+                fill={isFavorite ? "currentColor" : "none"}
+                strokeWidth={2}
+                />
+            </button>
+            </div>
 
             <div className="mt-5 flex flex-wrap items-center gap-3 text-sm text-gray-300">
               {movie.release_date && (

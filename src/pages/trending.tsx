@@ -4,6 +4,7 @@ import useMovies from "../hooks/useMovies";
 import Navbar from "../components/naveBar";
 import useDebounce from "../hooks/useDebounce";
 import MovieFilters from "../components/MovieFilters";
+import MovieGridSkeleton from "../components/loadingSkeleton";
 
 function Trending() {
 const [searchQuery, setSearchQuery] = useState("");
@@ -37,9 +38,7 @@ const filteredMovies = movies
     }
   });
 
-if (loading) {
-    return <div>Loading...</div>;
-  }
+
 
   if (error) {
     return <div>{error}</div>;
@@ -65,8 +64,11 @@ if (loading) {
 
       </div>
       
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 p-20">
+      {loading ? (
+            <MovieGridSkeleton  />
+          
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 p-20">
           {filteredMovies.length > 0 ? (
             filteredMovies.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
@@ -77,6 +79,7 @@ if (loading) {
             </div>
           )}
         </div>
+      )}
     </div>
     
   );

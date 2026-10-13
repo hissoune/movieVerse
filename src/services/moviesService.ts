@@ -1,4 +1,3 @@
-import { data } from "react-router-dom";
 import type { Movie } from "../types";
 import axiosInstance from "./apiClient";
 

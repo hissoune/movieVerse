@@ -8,24 +8,20 @@ const useMovies = (query: string) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchMovies = async () => {
+    const timeout = setTimeout(async () => {
       try {
-
-        setLoading(query.trim() ? false : true);
+        setLoading(true);
         setError(null);
-
-  const results = query.trim()
-          ? await searchMovies(query.trim())
-          : await getTrendingMovies();
+        const results = query.trim() ? await searchMovies(query.trim()) : await getTrendingMovies();
         setMovies(results);
       } catch {
         setError("Failed to load movies. Please try again.");
       } finally {
         setLoading(false);
       }
-    };
+    }, 700);
 
-    fetchMovies();
+    return () => clearTimeout(timeout);
   }, [query]);
 
   return { movies, loading, error };
